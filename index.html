@@ -32,13 +32,20 @@
       const items = getItems();
       const randomItem = items[Math.floor(Math.random() * items.length)];
       result.textContent = randomItem;
+      if ('speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(randomItem.toLowerCase());
+        window.speechSynthesis.cancel(); // Stop any ongoing speech
+        window.speechSynthesis.speak(utter);
+      }
     }
 
     button.addEventListener('click', pickRandom);
 
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ' && document.activeElement !== textarea) {
+      if ((e.key === 'Enter' || e.key === ' ') && document.activeElement !== textarea) {
         pickRandom();
+      } else if (e.key === 'Escape' && document.activeElement === textarea) {
+        textarea.blur();
       }
     });
   </script>
