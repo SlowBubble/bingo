@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Item Picker</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    textarea { width: 300px; height: 120px; display: block; margin-bottom: 1em; }
+    #result { font-size: 120px; margin-top: 1em; }
+    button { font-size: 1em; padding: 0.5em 1em; }
+  </style>
+</head>
+<body>
+  <div id="result"></div>
+  <hr/>
+  <h1>Random Item Picker</h1>
+  <textarea id="items" placeholder="Enter items, one per line..."></textarea>
+  <button id="pickBtn">Pick Random Item</button>
+  <script>
+    const textarea = document.getElementById('items');
+    const button = document.getElementById('pickBtn');
+    const result = document.getElementById('result');
+    const alphabet = Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i));
+
+    function getItems() {
+      const lines = textarea.value.split('\n').map(line => line.trim()).filter(Boolean);
+      return lines.length ? lines : alphabet;
+    }
+
+    function pickRandom() {
+      const items = getItems();
+      const randomItem = items[Math.floor(Math.random() * items.length)];
+      result.textContent = randomItem;
+    }
+
+    button.addEventListener('click', pickRandom);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ' && document.activeElement !== textarea) {
+        pickRandom();
+      }
+    });
+  </script>
+</body>
+</html>
